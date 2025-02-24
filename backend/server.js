@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const Client = require("./config/db");
 const port = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ const Router = require("./router/routes");
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads",express.static(path.join(__dirname,"uploads")))
 
 
 // connection to db 
@@ -21,13 +23,15 @@ Client.connect()
 .then(() => {
     console.log("Connected to MongoDB");
     // Super Admin created 
-    AdminCreate();
-})
+
+      AdminCreate();
+
+    })
 .catch((err) => {
     console.log("Error connecting to MongoDB:", err);
 })
 
-
+// Routes
 app.use("/", Router)
 
 
